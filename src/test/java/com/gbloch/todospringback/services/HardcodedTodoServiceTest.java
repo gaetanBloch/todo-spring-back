@@ -1,5 +1,6 @@
 package com.gbloch.todospringback.services;
 
+import com.gbloch.todospringback.exceptions.ResourceNotFoundException;
 import com.gbloch.todospringback.model.Todo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -8,8 +9,7 @@ import java.util.List;
 
 import static com.gbloch.todospringback.services.HardcodedTodoService.DESCRIPTION;
 import static com.gbloch.todospringback.services.HardcodedTodoService.USERNAME;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Gaëtan Bloch
@@ -34,5 +34,22 @@ class HardcodedTodoServiceTest {
         assertEquals(USERNAME, todos.get(0).getUsername());
         assertEquals(DESCRIPTION, todos.get(0).getDescription());
         assertFalse(todos.get(0).isDone());
+    }
+
+    @Test
+    void findByIdTest() {
+        // When
+        Todo todo = todoService.findById(1L);
+
+        // Then
+        assertEquals(1L, todo.getId());
+        assertEquals(USERNAME, todo.getUsername());
+        assertEquals(DESCRIPTION, todo.getDescription());
+        assertFalse(todo.isDone());
+    }
+
+    @Test
+    void findByIdNotFoundTest() {
+        assertThrows(ResourceNotFoundException.class, () -> todoService.findById(5L));
     }
 }

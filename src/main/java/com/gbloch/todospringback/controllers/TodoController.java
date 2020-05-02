@@ -23,4 +23,9 @@ final class TodoController extends AbstractController {
     public List<Todo> getAllTodos(@PathVariable String username) {
         return todoService.findAll();
     }
+
+    @GetMapping("/users/{username}/todos/{id}")
+    public Todo getTodoById(@PathVariable String username, @PathVariable Long id) {
+        return todoService.findById(id);
+    }
 }

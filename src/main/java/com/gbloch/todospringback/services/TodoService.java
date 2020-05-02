@@ -10,4 +10,8 @@ import java.util.List;
  */
 public interface TodoService {
     List<Todo> findAll();
+
+    Todo findById(Long id);
+
+    void deleteById(Long id);
 }

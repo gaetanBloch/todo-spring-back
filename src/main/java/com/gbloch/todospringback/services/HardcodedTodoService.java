@@ -1,5 +1,6 @@
 package com.gbloch.todospringback.services;
 
+import com.gbloch.todospringback.exceptions.ResourceNotFoundException;
 import com.gbloch.todospringback.model.Todo;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +51,21 @@ final class HardcodedTodoService implements TodoService {
     @Override
     public List<Todo> findAll() {
         return TODOS;
+    }
+
+    @Override
+    public Todo findById(Long id) {
+        return TODOS
+                .stream()
+                .filter(todo -> todo.getId().equals(id))
+                .findFirst()
+                .orElseThrow(() -> {
+                    throw new ResourceNotFoundException("Todo not found for id = " + id);
+                });
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
     }
 }
