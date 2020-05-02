@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -58,10 +59,9 @@ class TodoControllerTest {
 
     @BeforeEach
     void setUp() {
-        mockMvc =
-                MockMvcBuilders.standaloneSetup(todoController)
-                        .setControllerAdvice(new RestResponseEntityExceptionHandler())
-                        .build();
+        mockMvc = MockMvcBuilders.standaloneSetup(todoController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
     }
 
     @Test
@@ -106,6 +106,40 @@ class TodoControllerTest {
 
         // When
         mockMvc.perform(get("/api/users/gbloch/todos/1"))
+
+                // Then
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status", equalTo(HttpStatus.NOT_FOUND.value())))
+                .andExpect(jsonPath("$.error", equalTo(HttpStatus.NOT_FOUND.getReasonPhrase())))
+                .andExpect(jsonPath("$.message", emptyOrNullString()))
+                .andExpect(jsonPath("$.trace", Matchers.any(String.class)))
+                .andExpect(jsonPath("$.path", equalTo("/api/users/gbloch/todos/1")));
+    }
+
+    @Test
+    void deleteTodoByIdTest() throws Exception {
+        // Given
+        given(todoService.deleteById(1L)).willReturn(TODO);
+
+        // When
+        mockMvc.perform(delete("/api/users/gbloch/todos/1"))
+
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.username", equalTo(USERNAME)))
+                .andExpect(jsonPath("$.description", equalTo(DESCRIPTION)))
+                .andExpect(jsonPath("$.targetDate", any(Long.class)))
+                .andExpect(jsonPath("$.done", equalTo(false)));
+    }
+
+    @Test
+    void deleteTodoByIdNotFoundTest() throws Exception {
+        // Given
+        given(todoService.deleteById(1L)).willThrow(ResourceNotFoundException.class);
+
+        // When
+        mockMvc.perform(delete("/api/users/gbloch/todos/1"))
 
                 // Then
                 .andExpect(status().isNotFound())

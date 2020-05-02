@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Created on 02/05/2020
  */
 class HardcodedTodoServiceTest {
-    private TodoService todoService;
+    private HardcodedTodoService todoService;
 
     @BeforeEach
     void setUp() {
@@ -30,9 +30,7 @@ class HardcodedTodoServiceTest {
 
         // Then
         assertEquals(4, todos.size());
-        assertEquals(1L, todos.get(0).getId());
         assertEquals(USERNAME, todos.get(0).getUsername());
-        assertEquals(DESCRIPTION, todos.get(0).getDescription());
         assertFalse(todos.get(0).isDone());
     }
 
@@ -51,5 +49,25 @@ class HardcodedTodoServiceTest {
     @Test
     void findByIdNotFoundTest() {
         assertThrows(ResourceNotFoundException.class, () -> todoService.findById(5L));
+    }
+
+    @Test
+    void deleteByIdTest() {
+        // When
+        Todo todo = todoService.deleteById(1L);
+
+        // Then
+        assertEquals(3, todoService.findAll().size());
+        assertEquals(1L, todo.getId());
+        assertEquals(USERNAME, todo.getUsername());
+        assertEquals(DESCRIPTION, todo.getDescription());
+        assertFalse(todo.isDone());
+
+        todoService.restTodos();
+    }
+
+    @Test
+    void deleteByIdNotFoundTest() {
+        assertThrows(ResourceNotFoundException.class, () -> todoService.deleteById(5L));
     }
 }
