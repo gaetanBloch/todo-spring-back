@@ -53,17 +53,15 @@ class HardcodedTodoServiceTest {
 
     @Test
     void deleteByIdTest() {
-        // When
-        Todo todo = todoService.deleteById(1L);
+        try {
+            // When
+            todoService.deleteById(1L);
 
-        // Then
-        assertEquals(3, todoService.findAll().size());
-        assertEquals(1L, todo.getId());
-        assertEquals(USERNAME, todo.getUsername());
-        assertEquals(DESCRIPTION, todo.getDescription());
-        assertFalse(todo.isDone());
-
-        todoService.restTodos();
+            // Then
+            assertEquals(3, todoService.findAll().size());
+        } finally {
+            todoService.resetTodos();
+        }
     }
 
     @Test

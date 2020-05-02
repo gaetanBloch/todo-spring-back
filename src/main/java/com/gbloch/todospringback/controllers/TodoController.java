@@ -3,10 +3,8 @@ package com.gbloch.todospringback.controllers;
 import com.gbloch.todospringback.model.Todo;
 import com.gbloch.todospringback.services.TodoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,7 +29,9 @@ final class TodoController extends AbstractController {
     }
 
     @DeleteMapping("/users/{username}/todos/{id}")
-    public Todo deleteTodoById(@PathVariable String username, @PathVariable Long id) {
-        return todoService.deleteById(id);
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteTodoById(@PathVariable String username,
+                               @PathVariable Long id) {
+        todoService.deleteById(id);
     }
 }

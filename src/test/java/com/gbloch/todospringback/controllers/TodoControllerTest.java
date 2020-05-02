@@ -20,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -118,25 +119,17 @@ class TodoControllerTest {
 
     @Test
     void deleteTodoByIdTest() throws Exception {
-        // Given
-        given(todoService.deleteById(1L)).willReturn(TODO);
-
         // When
         mockMvc.perform(delete("/api/users/gbloch/todos/1"))
 
                 // Then
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id", equalTo(1)))
-                .andExpect(jsonPath("$.username", equalTo(USERNAME)))
-                .andExpect(jsonPath("$.description", equalTo(DESCRIPTION)))
-                .andExpect(jsonPath("$.targetDate", any(Long.class)))
-                .andExpect(jsonPath("$.done", equalTo(false)));
+                .andExpect(status().isNoContent());
     }
 
     @Test
     void deleteTodoByIdNotFoundTest() throws Exception {
         // Given
-        given(todoService.deleteById(1L)).willThrow(ResourceNotFoundException.class);
+        doThrow(ResourceNotFoundException.class).when(todoService).deleteById(1L);
 
         // When
         mockMvc.perform(delete("/api/users/gbloch/todos/1"))

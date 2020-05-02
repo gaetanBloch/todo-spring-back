@@ -66,14 +66,12 @@ final class HardcodedTodoService implements TodoService {
     }
 
     @Override
-    public Todo deleteById(Long id) {
-        Todo todo = findById(id);
-        TODOS.remove(todo);
-        return todo;
+    public void deleteById(Long id) {
+        TODOS.remove(findById(id));
     }
 
     // For Tests
-    void restTodos() {
+    void resetTodos() {
         TODOS.add(TODO);
     }
 }
