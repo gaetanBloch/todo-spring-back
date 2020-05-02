@@ -11,18 +11,20 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @RequestMapping("/api")
 public class HelloWorldController {
+    static final String HELLO_WORLD = "Hello World from the Server";
+
     @GetMapping("/hello-world")
     public String helloWorld() {
-        return "Hello World from the Server";
+        return HELLO_WORLD;
     }
 
     @GetMapping("/hello-world-model")
     public HelloWorld helloWorldModel() {
-        return new HelloWorld("Hello World from the Server");
+        return new HelloWorld(HELLO_WORLD);
     }
 
     @GetMapping("/hello-world/{name}")
     public HelloWorld helloWorldName(@PathVariable String name) {
-        return new HelloWorld(String.format("Hello World from the server %s", name));
+        return new HelloWorld(String.format(HELLO_WORLD + ", %s", name));
     }
 }
