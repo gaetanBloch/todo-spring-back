@@ -2,8 +2,6 @@ package com.gbloch.todospringback.controllers;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -17,7 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * @author Gaëtan Bloch
  * Created on 02/05/2020
  */
-@ExtendWith(MockitoExtension.class)
 class HelloWorldControllerTest {
     private MockMvc mockMvc;
 

@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.gbloch.todospringback.services.HardcodedTodoService.DESCRIPTION;
+import static com.gbloch.todospringback.services.HardcodedTodoService.USERNAME;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
@@ -30,6 +31,7 @@ class HardcodedTodoServiceTest {
         // Then
         assertEquals(4, todos.size());
         assertEquals(1L, todos.get(0).getId());
+        assertEquals(USERNAME, todos.get(0).getUsername());
         assertEquals(DESCRIPTION, todos.get(0).getDescription());
         assertFalse(todos.get(0).isDone());
     }

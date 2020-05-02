@@ -13,29 +13,34 @@ import java.util.List;
  */
 @Service
 final class HardcodedTodoService implements TodoService {
+    static final String USERNAME = "gbloch";
     static final String DESCRIPTION = "Become an expert at Angular";
     private static Long idCounter = 0L;
-    private static final List<Todo> todos = Arrays.asList(
+    private static final List<Todo> TODOS = Arrays.asList(
             Todo.builder()
                     .id(++idCounter)
+                    .username(USERNAME)
                     .description(DESCRIPTION)
                     .targetDate(new Date())
                     .isDone(false)
                     .build(),
             Todo.builder()
                     .id(++idCounter)
+                    .username(USERNAME)
                     .description("Become an expert at Node.js")
                     .targetDate(new Date())
                     .isDone(false)
                     .build(),
             Todo.builder()
                     .id(++idCounter)
+                    .username(USERNAME)
                     .description("Learn Reactjs")
                     .targetDate(new Date())
                     .isDone(false)
                     .build(),
             Todo.builder()
                     .id(++idCounter)
+                    .username(USERNAME)
                     .description("Learn Ansible")
                     .targetDate(new Date())
                     .isDone(false)
@@ -44,6 +49,6 @@ final class HardcodedTodoService implements TodoService {
 
     @Override
     public List<Todo> findAll() {
-        return todos;
+        return TODOS;
     }
 }
