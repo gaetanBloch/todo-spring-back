@@ -16,6 +16,7 @@ import java.util.List;
 final class HardcodedTodoService implements TodoService {
     static final String USERNAME = "gbloch";
     static final String DESCRIPTION = "Become an expert at Angular";
+    private static Long idCounter = 0L;
     private static final List<Todo> TODOS = new ArrayList<>(4);
 
     static {
@@ -49,16 +50,27 @@ final class HardcodedTodoService implements TodoService {
         return todo;
     }
 
+    @Override
+    public Todo create(Todo todo) {
+        todo.setId(++idCounter);
+        TODOS.add(todo);
+        return todo;
+    }
+
     // For Tests
-    static void resetTodos() {
-        Long idCounter = 0L;
-        TODOS.clear();
-        TODOS.add(Todo.builder().id(++idCounter)
+    static Todo createTodo() {
+        return Todo.builder().id(++idCounter)
                 .username(USERNAME)
                 .description(DESCRIPTION)
                 .targetDate(new Date())
                 .isDone(false)
-                .build());
+                .build();
+    }
+
+    static void resetTodos() {
+        idCounter = 0L;
+        TODOS.clear();
+        TODOS.add(createTodo());
         TODOS.add(Todo.builder()
                 .id(++idCounter)
                 .username(USERNAME)

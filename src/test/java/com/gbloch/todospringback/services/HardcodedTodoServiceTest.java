@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.gbloch.todospringback.services.HardcodedTodoService.DESCRIPTION;
-import static com.gbloch.todospringback.services.HardcodedTodoService.USERNAME;
+import static com.gbloch.todospringback.services.HardcodedTodoService.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -101,5 +100,25 @@ class HardcodedTodoServiceTest {
         assertThrows(ResourceNotFoundException.class, () ->
                 todoService.update(Todo.builder().id(5L).build())
         );
+    }
+
+    @Test
+    void createTest() {
+        try {
+            // Given
+            Todo todo = createTodo();
+
+            // When
+            todoService.create(todo);
+
+            // Then
+            assertEquals(5, todoService.findAll().size());
+            assertEquals(6L, todo.getId());
+            assertEquals(USERNAME, todo.getUsername());
+            assertEquals(DESCRIPTION, todo.getDescription());
+            assertFalse(todo.isDone());
+        } finally {
+            HardcodedTodoService.resetTodos();
+        }
     }
 }

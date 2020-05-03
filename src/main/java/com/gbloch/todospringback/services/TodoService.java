@@ -16,4 +16,6 @@ public interface TodoService {
     void deleteById(Long id);
 
     Todo update(Todo todo);
+
+    Todo create(Todo todo);
 }
