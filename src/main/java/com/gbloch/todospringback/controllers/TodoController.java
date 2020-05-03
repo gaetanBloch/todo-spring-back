@@ -30,8 +30,7 @@ final class TodoController extends AbstractController {
 
     @DeleteMapping("/users/{username}/todos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTodo(@PathVariable String username,
-                           @PathVariable Long id) {
+    public void deleteTodo(@PathVariable String username, @PathVariable Long id) {
         todoService.deleteById(id);
     }
 
@@ -40,5 +39,11 @@ final class TodoController extends AbstractController {
                            @PathVariable Long id,
                            @RequestBody Todo todo) {
         return todoService.update(todo);
+    }
+
+    @PostMapping("/users/{username}/todos")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Todo createTodo(@PathVariable String username, @RequestBody Todo todo) {
+        return todoService.create(todo);
     }
 }

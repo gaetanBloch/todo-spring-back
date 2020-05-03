@@ -182,4 +182,23 @@ class TodoControllerTest {
                 .andExpect(jsonPath("$.trace", Matchers.any(String.class)))
                 .andExpect(jsonPath("$.path", equalTo("/api/users/gbloch/todos/1")));
     }
+
+    @Test
+    void createTodoTest() throws Exception {
+        // Given
+        given(todoService.create(ArgumentMatchers.any(Todo.class))).willReturn(TODO);
+
+        // When
+        mockMvc.perform(post("/api/users/gbloch/todos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(ControllerTestUtils.asJsonString(TODO)))
+
+                // Then
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.username", equalTo(USERNAME)))
+                .andExpect(jsonPath("$.description", equalTo(DESCRIPTION)))
+                .andExpect(jsonPath("$.targetDate", any(Long.class)))
+                .andExpect(jsonPath("$.done", equalTo(false)));
+    }
 }
