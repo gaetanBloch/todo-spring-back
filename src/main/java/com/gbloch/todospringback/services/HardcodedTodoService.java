@@ -17,37 +17,11 @@ final class HardcodedTodoService implements TodoService {
     static final String USERNAME = "gbloch";
     static final String DESCRIPTION = "Become an expert at Angular";
     private static Long idCounter = 0L;
-    private static final Todo TODO = Todo.builder().id(++idCounter)
-            .username(USERNAME)
-            .description(DESCRIPTION)
-            .targetDate(new Date())
-            .isDone(false)
-            .build();
+    private static final Todo TODO = getTodo();
     private static final List<Todo> TODOS = new ArrayList<>(4);
 
     static {
-        TODOS.add(TODO);
-        TODOS.add(Todo.builder()
-                .id(++idCounter)
-                .username(USERNAME)
-                .description("Become an expert at Node.js")
-                .targetDate(new Date())
-                .isDone(false)
-                .build());
-        TODOS.add(Todo.builder()
-                .id(++idCounter)
-                .username(USERNAME)
-                .description("Learn Reactjs")
-                .targetDate(new Date())
-                .isDone(false)
-                .build());
-        TODOS.add(Todo.builder()
-                .id(++idCounter)
-                .username(USERNAME)
-                .description("Learn Ansible")
-                .targetDate(new Date())
-                .isDone(false)
-                .build());
+        resetTodos();
     }
 
     @Override
@@ -70,8 +44,47 @@ final class HardcodedTodoService implements TodoService {
         TODOS.remove(findById(id));
     }
 
+    @Override
+    public Todo update(Todo todo) {
+        TODOS.remove(findById(todo.getId()));
+        TODOS.add(todo);
+        return todo;
+    }
+
+    private static Todo getTodo() {
+        return Todo.builder().id(++idCounter)
+                .username(USERNAME)
+                .description(DESCRIPTION)
+                .targetDate(new Date())
+                .isDone(false)
+                .build();
+    }
+
     // For Tests
-    void resetTodos() {
-        TODOS.add(TODO);
+    static void resetTodos() {
+        idCounter = 0L;
+        TODOS.clear();
+        TODOS.add(getTodo());
+        TODOS.add(Todo.builder()
+                .id(++idCounter)
+                .username(USERNAME)
+                .description("Become an expert at Node.js")
+                .targetDate(new Date())
+                .isDone(false)
+                .build());
+        TODOS.add(Todo.builder()
+                .id(++idCounter)
+                .username(USERNAME)
+                .description("Learn Reactjs")
+                .targetDate(new Date())
+                .isDone(false)
+                .build());
+        TODOS.add(Todo.builder()
+                .id(++idCounter)
+                .username(USERNAME)
+                .description("Learn Ansible")
+                .targetDate(new Date())
+                .isDone(false)
+                .build());
     }
 }
