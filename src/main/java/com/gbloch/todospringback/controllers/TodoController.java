@@ -24,14 +24,21 @@ final class TodoController extends AbstractController {
     }
 
     @GetMapping("/users/{username}/todos/{id}")
-    public Todo getTodoById(@PathVariable String username, @PathVariable Long id) {
+    public Todo getTodo(@PathVariable String username, @PathVariable Long id) {
         return todoService.findById(id);
     }
 
     @DeleteMapping("/users/{username}/todos/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteTodoById(@PathVariable String username,
-                               @PathVariable Long id) {
+    public void deleteTodo(@PathVariable String username,
+                           @PathVariable Long id) {
         todoService.deleteById(id);
+    }
+
+    @PutMapping("/users/{username}/todos/{id}")
+    public Todo updateTodo(@PathVariable String username,
+                           @PathVariable Long id,
+                           @RequestBody Todo todo) {
+        return todoService.update(todo);
     }
 }

@@ -7,10 +7,12 @@ import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
@@ -21,8 +23,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -84,7 +85,7 @@ class TodoControllerTest {
     }
 
     @Test
-    void getTodoByIdTest() throws Exception {
+    void getTodoTest() throws Exception {
         // Given
         given(todoService.findById(1L)).willReturn(TODO);
 
@@ -101,7 +102,7 @@ class TodoControllerTest {
     }
 
     @Test
-    void getTodoByIdNotFoundTest() throws Exception {
+    void getTodoNotFoundTest() throws Exception {
         // Given
         given(todoService.findById(1L)).willThrow(ResourceNotFoundException.class);
 
@@ -118,7 +119,7 @@ class TodoControllerTest {
     }
 
     @Test
-    void deleteTodoByIdTest() throws Exception {
+    void deleteTodoTest() throws Exception {
         // When
         mockMvc.perform(delete("/api/users/gbloch/todos/1"))
 
@@ -127,12 +128,51 @@ class TodoControllerTest {
     }
 
     @Test
-    void deleteTodoByIdNotFoundTest() throws Exception {
+    void deleteTodoNotFoundTest() throws Exception {
         // Given
         doThrow(ResourceNotFoundException.class).when(todoService).deleteById(1L);
 
         // When
         mockMvc.perform(delete("/api/users/gbloch/todos/1"))
+
+                // Then
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status", equalTo(HttpStatus.NOT_FOUND.value())))
+                .andExpect(jsonPath("$.error", equalTo(HttpStatus.NOT_FOUND.getReasonPhrase())))
+                .andExpect(jsonPath("$.message", emptyOrNullString()))
+                .andExpect(jsonPath("$.trace", Matchers.any(String.class)))
+                .andExpect(jsonPath("$.path", equalTo("/api/users/gbloch/todos/1")));
+    }
+
+    @Test
+    void updateTodoTest() throws Exception {
+        // Given
+        given(todoService.update(ArgumentMatchers.any(Todo.class))).willReturn(TODO);
+
+        // When
+        mockMvc.perform(put("/api/users/gbloch/todos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(ControllerTestUtils.asJsonString(TODO)))
+
+                // Then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", equalTo(1)))
+                .andExpect(jsonPath("$.username", equalTo(USERNAME)))
+                .andExpect(jsonPath("$.description", equalTo(DESCRIPTION)))
+                .andExpect(jsonPath("$.targetDate", any(Long.class)))
+                .andExpect(jsonPath("$.done", equalTo(false)));
+    }
+
+    @Test
+    void updateTodoNotFoundTest() throws Exception {
+        // Given
+        given(todoService.update(ArgumentMatchers.any(Todo.class)))
+                .willThrow(ResourceNotFoundException.class);
+
+        // When
+        mockMvc.perform(put("/api/users/gbloch/todos/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(ControllerTestUtils.asJsonString(TODO)))
 
                 // Then
                 .andExpect(status().isNotFound())
