@@ -9,3 +9,15 @@ values ('gbloch', 'Learn Reactjs', sysdate(), false);
 
 insert into todo(username, description, target_date, is_done)
 values ('gbloch', 'Learn Ansible', sysdate(), false);
+
+insert into todo(username, description, target_date, is_done)
+values ('admin', 'Become an expert at Angular', sysdate(), true);
+
+insert into todo(username, description, target_date, is_done)
+values ('admin', 'Become an expert at Node.js', sysdate(), false);
+
+insert into todo(username, description, target_date, is_done)
+values ('admin', 'Learn Reactjs', sysdate(), false);
+
+insert into todo(username, description, target_date, is_done)
+values ('admin', 'Learn Ansible', sysdate(), false);

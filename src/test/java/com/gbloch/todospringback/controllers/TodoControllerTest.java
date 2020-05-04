@@ -16,10 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
+import static com.gbloch.todospringback.TestUtils.*;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
@@ -33,26 +30,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 @ExtendWith(MockitoExtension.class)
 class TodoControllerTest {
-    private static final String USERNAME = "gbloch";
-    private static final String DESCRIPTION = "Become an expert at Angular";
-    private static final Todo TODO = Todo.builder()
-            .id(1L)
-            .username(USERNAME)
-            .description(DESCRIPTION)
-            .targetDate(new Date())
-            .isDone(false)
-            .build();
-    private static final List<Todo> TODOS = Arrays.asList(
-            TODO,
-            Todo.builder()
-                    .id(2L)
-                    .username(USERNAME)
-                    .description("Become an expert at Node.js")
-                    .targetDate(new Date())
-                    .isDone(false)
-                    .build()
-    );
-
     @Mock
     private TodoService todoService;
     @InjectMocks
