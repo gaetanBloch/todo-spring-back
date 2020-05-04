@@ -1,5 +1,6 @@
 package com.gbloch.todospringback.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,23 +23,22 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author Gaëtan Bloch
  * Created on 03/05/2020
  */
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private JwtUnAuthorizedResponseAuthenticationEntryPoint
+    private final JwtUnAuthorizedResponseAuthenticationEntryPoint
             jwtUnAuthorizedResponseAuthenticationEntryPoint;
-
-    @Autowired
-    private UserDetailsService jwtInMemoryUserDetailsService;
-
-    @Autowired
-    private JwtTokenAuthorizationOncePerRequestFilter jwtAuthenticationTokenFilter;
+    private final UserDetailsService jwtInMemoryUserDetailsService;
+    private final JwtTokenAuthorizationOncePerRequestFilter jwtAuthenticationTokenFilter;
 
     @Value("/api${jwt.get.token.uri}")
     private String authenticationPath;
+
+    @Value("/api${jwt.create.user.uri}")
+    private String signupPath;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -86,8 +86,8 @@ public class JWTWebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .ignoring()
                 .antMatchers(
                         HttpMethod.POST,
-                        authenticationPath
-                )
+                        authenticationPath,
+                        signupPath)
                 .antMatchers(HttpMethod.OPTIONS, "/**")
                 .and()
                 .ignoring()

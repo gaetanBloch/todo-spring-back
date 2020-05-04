@@ -1,9 +1,10 @@
 package com.gbloch.todospringback.jwt.resource;
 
 import com.gbloch.todospringback.controllers.AbstractController;
+import com.gbloch.todospringback.jwt.JwtInMemoryUserDetailsService;
 import com.gbloch.todospringback.jwt.JwtTokenUtil;
 import com.gbloch.todospringback.jwt.JwtUserDetails;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,36 +24,37 @@ import java.util.Objects;
  * Created on 03/05/2020
  */
 @RestController
+@RequiredArgsConstructor
 public class JwtAuthenticationRestController extends AbstractController {
 
     @Value("${jwt.http.request.header}")
     private String tokenHeader;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+    private final JwtTokenUtil jwtTokenUtil;
+    private final UserDetailsService jwtInMemoryUserDetailsService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private UserDetailsService jwtInMemoryUserDetailsService;
-
-    @RequestMapping(value = "${jwt.get.token.uri}", method = RequestMethod.POST)
-    public ResponseEntity<?> createAuthenticationToken(
+    @PostMapping("${jwt.get.token.uri}")
+    public JwtTokenResponse createAuthenticationToken(
             @RequestBody JwtTokenRequest authenticationRequest)
             throws AuthenticationException {
 
-        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
-        final UserDetails userDetails = jwtInMemoryUserDetailsService
-                .loadUserByUsername(authenticationRequest.getUsername());
-
-        final String token = jwtTokenUtil.generateToken(userDetails);
-
-        return ResponseEntity.ok(new JwtTokenResponse(token));
+        return this.authenticateAndGenerateToken(authenticationRequest);
     }
 
-    @RequestMapping(value = "${jwt.refresh.token.uri}", method = RequestMethod.GET)
+    @PostMapping("${jwt.create.user.uri}")
+    public JwtTokenResponse createUserAndGetToken(
+            @RequestBody JwtTokenRequest authenticationRequest) {
+
+        JwtInMemoryUserDetailsService.addUser(
+                authenticationRequest.getUsername(),
+                authenticationRequest.getPassword()
+        );
+
+        return this.authenticateAndGenerateToken(authenticationRequest);
+    }
+
+    @GetMapping("${jwt.refresh.token.uri}")
     public ResponseEntity<?> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String authToken = request.getHeader(tokenHeader);
         final String token = authToken.substring(7);
@@ -71,6 +73,17 @@ public class JwtAuthenticationRestController extends AbstractController {
     @ExceptionHandler({AuthenticationException.class})
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+    }
+
+    private JwtTokenResponse authenticateAndGenerateToken(JwtTokenRequest authenticationRequest) {
+        authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        final UserDetails userDetails = jwtInMemoryUserDetailsService
+                .loadUserByUsername(authenticationRequest.getUsername());
+
+        final String token = jwtTokenUtil.generateToken(userDetails);
+
+        return new JwtTokenResponse(token);
     }
 
     private void authenticate(String username, String password) {
