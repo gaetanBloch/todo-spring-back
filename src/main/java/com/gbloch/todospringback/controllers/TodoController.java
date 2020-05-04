@@ -38,12 +38,15 @@ final class TodoController extends AbstractController {
     public Todo updateTodo(@PathVariable String username,
                            @PathVariable Long id,
                            @RequestBody Todo todo) {
+        todo.setId(id);
+        todo.setUsername(username);
         return todoService.update(todo);
     }
 
     @PostMapping("/users/{username}/todos")
     @ResponseStatus(HttpStatus.CREATED)
     public Todo createTodo(@PathVariable String username, @RequestBody Todo todo) {
+        todo.setUsername(username);
         return todoService.create(todo);
     }
 }
