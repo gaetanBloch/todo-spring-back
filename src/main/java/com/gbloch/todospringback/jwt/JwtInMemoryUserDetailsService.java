@@ -50,7 +50,9 @@ public class JwtInMemoryUserDetailsService implements UserDetailsService {
     public static void addUser(String username, String password) {
         if (inMemoryUserList.stream().anyMatch(jwtUserDetails ->
                 jwtUserDetails.getUsername().equals(username))) {
-            throw new AuthenticationException("Username [" + username + "] already in use");
+            throw new AuthenticationException(
+                    "Cannot create new user because username '" + username + "' is already in use"
+            );
         }
 
         inMemoryUserList.add(new JwtUserDetails(
