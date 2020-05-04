@@ -48,6 +48,22 @@ class JpaTodoServiceTest {
     }
 
     @Test
+    void findAllByUserNameTest() {
+        // Given
+        given(todoRepository.findAllByUsername(USERNAME)).willReturn(TODOS);
+
+        // When
+        List<Todo> todos = todoService.findAllByUsername(USERNAME);
+
+        // Then
+        assertEquals(2, todos.size());
+        assertEquals(1L, todos.get(0).getId());
+        assertEquals(USERNAME, todos.get(0).getUsername());
+        assertEquals(DESCRIPTION, todos.get(0).getDescription());
+        assertFalse(todos.get(0).isDone());
+    }
+
+    @Test
     void findByIdTest() {
         // Given
         given(todoRepository.findById(1L)).willReturn(Optional.of(TODO));

@@ -11,6 +11,8 @@ import java.util.List;
 public interface TodoService {
     List<Todo> findAll();
 
+    List<Todo> findAllByUsername(String username);
+
     Todo findById(Long id);
 
     void deleteById(Long id);

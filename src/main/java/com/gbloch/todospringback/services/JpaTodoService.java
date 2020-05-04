@@ -26,6 +26,11 @@ final class JpaTodoService implements TodoService {
     }
 
     @Override
+    public List<Todo> findAllByUsername(String username) {
+        return todoRepository.findAllByUsername(username);
+    }
+
+    @Override
     public Todo findById(Long id) {
         return todoRepository.findById(id).orElseThrow(() -> {
             throw new ResourceNotFoundException("Todo not found for id = " + id);

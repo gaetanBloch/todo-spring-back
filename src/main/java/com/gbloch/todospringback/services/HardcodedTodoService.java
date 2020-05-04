@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author Gaëtan Bloch
@@ -26,6 +27,13 @@ final class HardcodedTodoService implements TodoService {
     @Override
     public List<Todo> findAll() {
         return TODOS;
+    }
+
+    @Override
+    public List<Todo> findAllByUsername(String username) {
+        return TODOS.stream()
+                .filter(todo -> todo.getUsername().equals(username))
+                .collect(Collectors.toList());
     }
 
     @Override

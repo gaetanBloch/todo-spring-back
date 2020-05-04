@@ -36,6 +36,19 @@ class HardcodedTodoServiceTest {
     }
 
     @Test
+    void findAllByUsernameTest() {
+        // When
+        List<Todo> todos = todoService.findAllByUsername(USERNAME);
+
+        // Then
+        assertEquals(4, todos.size());
+        assertEquals(1L, todos.get(0).getId());
+        assertEquals(USERNAME, todos.get(0).getUsername());
+        assertEquals(DESCRIPTION, todos.get(0).getDescription());
+        assertFalse(todos.get(0).isDone());
+    }
+
+    @Test
     void findByIdTest() {
         // When
         Todo todo = todoService.findById(1L);
