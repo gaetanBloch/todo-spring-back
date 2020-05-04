@@ -9,5 +9,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api")
-abstract class AbstractController {
+public abstract class AbstractController {
 }

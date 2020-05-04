@@ -1,4 +1,4 @@
-package com.gbloch.todospringback.config.basicauth;
+package com.gbloch.basicauth;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
