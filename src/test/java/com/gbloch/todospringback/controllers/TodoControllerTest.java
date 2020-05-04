@@ -46,10 +46,10 @@ class TodoControllerTest {
     @Test
     void getAllTodos() throws Exception {
         // Given
-        given(todoService.findAll()).willReturn(TODOS);
+        given(todoService.findAllByUsername(USERNAME)).willReturn(TODOS);
 
         // When
-        mockMvc.perform(get("/api/users/gbloch/todos"))
+        mockMvc.perform(get("/api/users/" + USERNAME + "/todos"))
 
                 // Then
                 .andExpect(status().isOk())

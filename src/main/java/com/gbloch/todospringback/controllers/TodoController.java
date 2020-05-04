@@ -20,7 +20,7 @@ final class TodoController extends AbstractController {
 
     @GetMapping("/users/{username}/todos")
     public List<Todo> getAllTodos(@PathVariable String username) {
-        return todoService.findAll();
+        return todoService.findAllByUsername(username);
     }
 
     @GetMapping("/users/{username}/todos/{id}")
