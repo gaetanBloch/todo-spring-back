@@ -10,7 +10,7 @@ To see the front-end of this application implemented with Angular, see [here](ht
 
 ## Running Application Process on your computer
 
-1. Download the application by clicking [here](https://github.com/gaetanBloch/sfg-pet-clinic/archive/master.zip)
+1. Download the application by clicking [here](https://github.com/gaetanBloch/todo-spring-back/archive/master.zip)
 2. Unzip the application
 3. Dowload and Install [Java 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 4. Set the environment variable `JAVA_HOME` to the root of your Java 11 jdk
